@@ -1,0 +1,86 @@
+.bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-pokemon {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.2;
+            animation: float 30s infinite linear;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            transition: all 0.3s ease;
+        }
+
+        .floating-pokemon:hover {
+            transform: scale(1.5) !important;
+            opacity: 0.8;
+            animation-play-state: paused;
+        }
+
+        .floating-pokemon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-pokemon:nth-child(2) { top: 20%; left: 80%; animation-delay: -5s; }
+        .floating-pokemon:nth-child(3) { top: 60%; left: 70%; animation-delay: -10s; }
+        .floating-pokemon:nth-child(4) { top: 80%; left: 20%; animation-delay: -15s; }
+        .floating-pokemon:nth-child(5) { top: 5%; left: 60%; animation-delay: -3s; }
+        .floating-pokemon:nth-child(6) { top: 40%; left: 5%; animation-delay: -8s; }
+        .floating-pokemon:nth-child(7) { top: 70%; left: 90%; animation-delay: -12s; }
+        .floating-pokemon:nth-child(8) { top: 30%; left: 40%; animation-delay: -18s; }
+        .floating-pokemon:nth-child(9) { top: 90%; left: 60%; animation-delay: -22s; }
+        .floating-pokemon:nth-child(10) { top: 15%; left: 30%; animation-delay: -6s; }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) rotate(0deg) scale(0.8); 
+                opacity: 0;
+            }
+            10% { opacity: 0.2; }
+            50% { 
+                transform: translateY(50vh) rotate(180deg) scale(1.3);
+                opacity: 0.3;
+            }
+            90% { opacity: 0.2; }
+            100% { 
+                transform: translateY(-150px) rotate(360deg) scale(0.8); 
+                opacity: 0;
+            }
+        }
+
+        /* Pokeball decorations */
+        .pokeball {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #e53e3e 50%, white 50%);
+            border: 4px solid #2d3748;
+            animation: bounce 3s ease-in-out infinite;
+            opacity: 0.08;
+        }
+
+        .pokeball::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 3px solid #2d3748;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .pokeball:nth-child(11) { top: 10%; right: 10%; animation-delay: 0s; }
+        .pokeball:nth-child(12) { top: 60%; right: 5%; animation-delay: -1s; }
+        .pokeball:nth-child(13) { bottom: 20%; left: 15%; animation-delay: -2s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }

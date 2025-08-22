@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéTime - Discover & Compare Pokemon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-pokemon {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.2;
+            animation: float 30s infinite linear;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            transition: all 0.3s ease;
+        }
+
+        .floating-pokemon:hover {
+            transform: scale(1.5) !important;
+            opacity: 0.8;
+            animation-play-state: paused;
+        }
+
+        .floating-pokemon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-pokemon:nth-child(2) { top: 20%; left: 80%; animation-delay: -5s; }
+        .floating-pokemon:nth-child(3) { top: 60%; left: 70%; animation-delay: -10s; }
+        .floating-pokemon:nth-child(4) { top: 80%; left: 20%; animation-delay: -15s; }
+        .floating-pokemon:nth-child(5) { top: 5%; left: 60%; animation-delay: -3s; }
+        .floating-pokemon:nth-child(6) { top: 40%; left: 5%; animation-delay: -8s; }
+        .floating-pokemon:nth-child(7) { top: 70%; left: 90%; animation-delay: -12s; }
+        .floating-pokemon:nth-child(8) { top: 30%; left: 40%; animation-delay: -18s; }
+        .floating-pokemon:nth-child(9) { top: 90%; left: 60%; animation-delay: -22s; }
+        .floating-pokemon:nth-child(10) { top: 15%; left: 30%; animation-delay: -6s; }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) rotate(0deg) scale(0.8); 
+                opacity: 0;
+            }
+            10% { opacity: 0.2; }
+            50% { 
+                transform: translateY(50vh) rotate(180deg) scale(1.3);
+                opacity: 0.3;
+            }
+            90% { opacity: 0.2; }
+            100% { 
+                transform: translateY(-150px) rotate(360deg) scale(0.8); 
+                opacity: 0;
+            }
+        }
+
+        /* Pokeball decorations */
+        .pokeball {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #e53e3e 50%, white 50%);
+            border: 4px solid #2d3748;
+            animation: bounce 3s ease-in-out infinite;
+            opacity: 0.08;
+        }
+
+        .pokeball::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 3px solid #2d3748;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .pokeball:nth-child(11) { top: 10%; right: 10%; animation-delay: 0s; }
+        .pokeball:nth-child(12) { top: 60%; right: 5%; animation-delay: -1s; }
+        .pokeball:nth-child(13) { bottom: 20%; left: 15%; animation-delay: -2s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            padding: 3rem 0 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6, #03a9f4, #0288d1);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 30px rgba(79, 195, 247, 0.4));
+            letter-spacing: -2px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tagline {
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 4rem 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Search section */
+        .search-section {
+            background: linear-gradient(135deg, rgba(79, 195, 247, 0.1), rgba(41, 182, 246, 0.1));
+            backdrop-filter: blur(30px);
+            border-radius: 25px;
+            padding: 4rem;
+            margin-bottom: 5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 1s ease;
+        }
+
+        .search-section:hover::before {
+            left: 100%;
+        }
+
+        .search-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 35px 70px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                inset 0 4px 15px rgba(0,0,0,0.1),
+                0 4px 20px rgba(0,0,0,0.1);
+            outline: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            transform: scale(1.03);
+            box-shadow: 
+                0 0 0 4px rgba(79, 195, 247, 0.3),
+                inset 0 4px 15px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.6);
+            background: linear-gradient(135deg, #29b6f6, #03a9f4);
+        }
+
+        .search-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        /* Features section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-card h3 {
+            color: white;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* CTA section */
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.2), rgba(79, 195, 247, 0.15));
+            padding: 4rem;
+            border-radius: 30px;
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 195, 247, 0.05) 0%, transparent 70%);
+            animation: rotate 25s linear infinite reverse;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 3rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4fc3f7, #2d3748);
+            color: white;
+            text-decoration: none;
+            padding: 1.5rem 3rem;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 10px 30px rgba(79, 195, 247, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(79, 195, 247, 0.4),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, #2d3748, #4fc3f7);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .search-section, .hero {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .feature-card {
+                padding: 2rem 1.5rem;
+            }
+
+        .search-description {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation">
+        <div class="floating-pokemon">🔥</div>
+        <div class="floating-pokemon">⚡</div>
+        <div class="floating-pokemon">💧</div>
+        <div class="floating-pokemon">🍃</div>
+        <div class="floating-pokemon">❄️</div>
+        <div class="floating-pokemon">👻</div>
+        <div class="floating-pokemon">🌙</div>
+        <div class="floating-pokemon">⭐</div>
+        <div class="floating-pokemon">💎</div>
+        <div class="floating-pokemon">🌟</div>
+        <div class="pokeball"></div>
+        <div class="pokeball"></div>
+        <div class="pokeball"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">PokéTime</div>
+            <p class="tagline">Your Ultimate Pokemon Statistics Hub</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Discover & Compare Pokemon Like Never Before</h1>
+            <p>Explore comprehensive stats, abilities, and battle data for over 800 Pokemon. Compare your favorites and build the perfect team with our advanced analytics!</p>
+        </section>
+
+        <section class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for any Pokemon... (e.g., Pikachu, Charizard, Mewtwo)">
+                <button class="search-btn">Search</button>
+            </div>
+            <p class="search-description">🎯 Try searching for your favorite Pokemon to see detailed stats and information!</p>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3>Detailed Stats</h3>
+                <p>View comprehensive statistics including HP, Attack, Defense, Speed, and more. Get deep insights into each Pokemon's strengths and weaknesses with interactive charts.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⚖️</span>
+                <h3>Compare Pokemon</h3>
+                <p>Advanced side-by-side comparison tool to analyze multiple Pokemon. Perfect for building competitive teams and strategic planning with visual stat comparisons.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <h3>Type Effectiveness</h3>
+                <p>Interactive type effectiveness chart showing all strengths and weaknesses. Master battle dynamics and plan your strategies with our comprehensive type calculator.</p>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Ready to Become a Pokemon Master?</h2>
+            <p>Join thousands of trainers who use PokéTime to optimize their teams and dominate battles!</p>
+            <a href="#" class="cta-btn">Start Your Journey</a>
+        </section>
+    </main>
+</body>
+</html>
