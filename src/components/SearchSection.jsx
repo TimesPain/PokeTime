@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./SearchSection.css";
 
-export function SearchSection({ setPokemonId, isSearched , setIsSearched }) {
+export function SearchSection({ setPokemonId, isSearched , setIsSearched , setPokemonData})   {
     
     const [inputTerm, setInputTerm] = useState('');
     return (
@@ -17,6 +17,8 @@ export function SearchSection({ setPokemonId, isSearched , setIsSearched }) {
                         .then(data => {
                             setPokemonId(data.id);
                             setIsSearched(isSearched + 1);
+                            setPokemonData(data);
+                            
                         })
                         .catch(error => {
                             alert('Error fetching Pokémon data:', error);
