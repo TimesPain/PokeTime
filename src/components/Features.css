@@ -6,12 +6,11 @@
             margin-bottom: 5rem;
         }
 
-        .feature-card {
+        .feature-card,.pokemon-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
             backdrop-filter: blur(25px);
             border-radius: 20px;
             padding: 3rem 2rem;
-            margin-bottom: 20px;
             text-align: center;
             border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.4s ease;
@@ -20,7 +19,7 @@
             cursor: pointer;
         }
 
-        .feature-card::before {
+        .feature-card::before,.pokemon-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -31,11 +30,11 @@
             transition: left 0.8s ease;
         }
 
-        .feature-card:hover::before {
+        .feature-card:hover::before,.pokemon-card:hover::before {
             left: 100%;
         }
 
-        .feature-card:hover {
+        .feature-card:hover,.pokemon-card:hover {
             transform: translateY(-15px) scale(1.02);
             box-shadow: 
                 0 25px 50px rgba(0,0,0,0.2),
@@ -55,7 +54,7 @@
             50% { transform: translateY(-10px); }
         }
 
-        .feature-card h3 {
+        .feature-card h3, .pokemon-card h3 {
             color: white;
             font-size: 1.6rem;
             margin-bottom: 1.5rem;
@@ -63,8 +62,13 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        .feature-card p {
+        .feature-card p, .pokemon-card p {
             color: rgba(255, 255, 255, 0.9);
             line-height: 1.8;
             font-size: 1.1rem;
+        }
+
+        .pokemon-card{
+            margin-bottom: 80px;
+            width: 30vw;
         }
