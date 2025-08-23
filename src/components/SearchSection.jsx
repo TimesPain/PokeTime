@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./SearchSection.css";
 
-export function SearchSection({ setPokemonId, isSearched, setIsSearched, setPokemonData, setLoading }) {
+export function SearchSection({ isSearched, setIsSearched, setPokemonData }) {
 
     const [inputTerm, setInputTerm] = useState('');
     return (
@@ -17,7 +17,6 @@ export function SearchSection({ setPokemonId, isSearched, setIsSearched, setPoke
                         const searchTerm = baseUrl + inputTerm.toLowerCase().trim();
                         const response = await fetch(searchTerm)
                         const data = await response.json()
-                        setPokemonId(data.id);
                         setIsSearched(isSearched + 1);
                         setPokemonData(data);
 
@@ -26,7 +25,6 @@ export function SearchSection({ setPokemonId, isSearched, setIsSearched, setPoke
                     catch (e) {
                         alert("Oops, Something went wrong. Error Details ", e);
                     }
-                    setLoading(true);
 
                 }} className="search-btn">Search</button>
             </div>

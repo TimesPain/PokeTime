@@ -4,12 +4,12 @@ import { MainContainer } from './MainContainer';
 
 
 
-export function HomePage() {
+export function HomePage({  pokemonData, setPokemonData }) {
   return (
     <>
       <Background />
       <Header />
-      <MainContainer />
+      <MainContainer pokemonData={pokemonData} setPokemonData={setPokemonData} />
     </>
   )
 }

@@ -9,26 +9,21 @@ import "./MainContainer.css";
 
 
 
-export function MainContainer() {
+export function MainContainer({ pokemonData, setPokemonData }) {
     const [isSearched, setIsSearched] = useState(0);
-    const [pokimonData, setPokemonData] = useState(null);
-    const [pokemonId, setPokemonId] = useState(null);
-    const [loading,setLoading] = useState(true); 
+    
 
     
     window.onload = function () {
         setIsSearched(0);
-        setPokemonId(null);
     };
     if (isSearched == 0) {
         return (
             <main className="container">
                 <Heading />
-                <SearchSection 
-                setPokemonId={setPokemonId} 
+                <SearchSection  
                 setIsSearched={setIsSearched} isSearched={isSearched} 
-                setPokemonData={setPokemonData} 
-                setLoading={setLoading} />
+                setPokemonData={setPokemonData} />
                 <Features />
                 <Cta />
             </main>
@@ -40,8 +35,8 @@ export function MainContainer() {
         return (
             <main className="container">
                 <Heading />
-                <SearchSection setPokemonId={setPokemonId} setIsSearched={setIsSearched} isSearched={isSearched} setPokemonData={setPokemonData} />
-                <PokemonCard pokimonData={pokimonData} pokemonId={pokemonId} loading={loading} setLoading={setLoading} />
+                <SearchSection setIsSearched={setIsSearched} isSearched={isSearched} setPokemonData={setPokemonData} />
+                <PokemonCard pokemonData={pokemonData} />
                 <Features />
                 <Cta />
             </main>
