@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 import "./Features.css";
 
 
@@ -6,6 +8,7 @@ export function Features() {
     {
       icon: "📊",
       title: "Detailed Stats",
+      link: "/details",
       description: "View comprehensive statistics including HP, Attack, Defense, Speed, and more. Get deep insights into each Pokemon's strengths and weaknesses with interactive charts."
     },
     {
@@ -23,11 +26,11 @@ export function Features() {
   return (
     <section className="features">
       {features.map((feature, index) => (
-        <div className="feature-card" key={index}>
+        <Link to={feature.link} className="feature-card" key={index}>
           <span className="feature-icon">{feature.icon}</span>
           <h3>{feature.title}</h3>
           <p>{feature.description}</p>
-        </div>
+        </Link>
       ))}
     </section>
   );

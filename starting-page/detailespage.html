@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charizard - PokéTime</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* Animated background elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-pokemon {
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.15;
+            animation: float 25s infinite linear;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        }
+
+        .floating-pokemon:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .floating-pokemon:nth-child(2) { top: 30%; left: 90%; animation-delay: -8s; }
+        .floating-pokemon:nth-child(3) { top: 70%; left: 80%; animation-delay: -15s; }
+        .floating-pokemon:nth-child(4) { top: 50%; left: 10%; animation-delay: -5s; }
+        .floating-pokemon:nth-child(5) { top: 80%; left: 50%; animation-delay: -12s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 0.2; }
+            100% { transform: translateY(0px) rotate(360deg); opacity: 0.1; }
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.4);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Pokemon header */
+        .pokemon-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            padding: 3rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pokemon-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,100,50,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pokemon-image {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 2rem;
+            background: radial-gradient(circle, rgba(255,100,50,0.2), rgba(255,100,50,0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 
+                0 20px 60px rgba(255,100,50,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            animation: pokemonFloat 4s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes pokemonFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        .pokemon-name {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .pokemon-id {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pokemon-types {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .type-badge {
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .type-fire { background: linear-gradient(135deg, #ff6b35, #f7931e); }
+        .type-flying { background: linear-gradient(135deg, #a890f0, #a8a878); }
+
+        .type-badge:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        .pokemon-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Stats section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .stats-card, .abilities-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before, .abilities-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .stats-card:hover::before, .abilities-card:hover::before {
+            left: 100%;
+        }
+
+        .stats-card:hover, .abilities-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+        }
+
+        .stat-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .stat-value {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #4fc3f7;
+        }
+
+        .stat-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+            border-radius: 10px;
+            transition: width 1s ease;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        .stat-hp { width: 52%; }
+        .stat-attack { width: 56%; }
+        .stat-defense { width: 52%; }
+        .stat-sp-attack { width: 73%; }
+        .stat-sp-defense { width: 57%; }
+        .stat-speed { width: 67%; }
+
+        /* Abilities */
+        .abilities-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .ability-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #4fc3f7;
+            transition: all 0.3s ease;
+        }
+
+        .ability-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+            border-left-color: #29b6f6;
+        }
+
+        .ability-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #4fc3f7;
+        }
+
+        .ability-description {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+        }
+
+        /* Evolution chain */
+        .evolution-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 4rem;
+        }
+
+        .evolution-chain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .evolution-pokemon {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .evolution-pokemon:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .evolution-sprite {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .evolution-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .evolution-level {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .evolution-arrow {
+            font-size: 2rem;
+            color: #4fc3f7;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Type effectiveness */
+        .type-effectiveness {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .effectiveness-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .effectiveness-category {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .effectiveness-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .weak-to { border-left: 4px solid #ff6b6b; }
+        .resistant-to { border-left: 4px solid #51cf66; }
+        .immune-to { border-left: 4px solid #868e96; }
+
+        .effectiveness-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .mini-type {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .type-water { background: linear-gradient(135deg, #6890f0, #6890f0); }
+        .type-electric { background: linear-gradient(135deg, #f8d030, #f8d030); }
+        .type-rock { background: linear-gradient(135deg, #b8a038, #b8a038); }
+        .type-fire-mini { background: linear-gradient(135deg, #f08030, #f08030); }
+        .type-grass { background: linear-gradient(135deg, #78c850, #78c850); }
+        .type-fighting { background: linear-gradient(135deg, #c03028, #c03028); }
+        .type-bug { background: linear-gradient(135deg, #a040a0, #a040a0); }
+        .type-steel { background: linear-gradient(135deg, #b8b8d0, #b8b8d0); }
+        .type-fairy { background: linear-gradient(135deg, #705898, #705898); }
+        .type-ground { background: linear-gradient(135deg, #705848, #705848); }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .pokemon-image {
+                width: 200px;
+                height: 200px;
+                font-size: 100px;
+            }
+
+            .pokemon-name {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .evolution-chain {
+                flex-direction: column;
+            }
+
+            .evolution-arrow {
+                transform: rotate(90deg);
+            }
+
+            .effectiveness-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation">
+        <div class="floating-pokemon">🔥</div>
+        <div class="floating-pokemon">⚡</div>
+        <div class="floating-pokemon">💧</div>
+        <div class="floating-pokemon">🍃</div>
+        <div class="floating-pokemon">🌟</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">PokéTime</a>
+            <a href="#" class="back-btn">← Back to Search</a>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container">
+        <!-- Pokemon Header -->
+        <section class="pokemon-header">
+            <div class="pokemon-image">🐉</div>
+            <h1 class="pokemon-name">Charizard</h1>
+            <p class="pokemon-id">#006</p>
+            <div class="pokemon-types">
+                <span class="type-badge type-fire">Fire</span>
+                <span class="type-badge type-flying">Flying</span>
+            </div>
+            <p class="pokemon-description">
+                Charizard flies around the sky in search of powerful opponents. It breathes fire of such great heat that it melts anything. However, it never turns its fiery breath on any opponent weaker than itself.
+            </p>
+        </section>
+
+        <!-- Stats and Abilities -->
+        <section class="stats-grid">
+            <div class="stats-card">
+                <h2 class="card-title">Base Stats</h2>
+                <div class="stat-item">
+                    <span class="stat-name">HP</span>
+                    <div>
+                        <span class="stat-value">78</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill stat-hp"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Attack</span>
+                    <div>
+                        <span class="stat-value">84</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill stat-attack"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Defense</span>
+                    <div>
+                        <span class="stat-value">78</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill stat-defense"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Sp. Attack</span>
+                    <div>
+                        <span class="stat-value">109</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill stat-sp-attack"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Sp. Defense</span>
+                    <div>
+                        <span class="stat-value">85</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill stat-sp-defense"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Speed</span>
+                    <div>
+                        <span class="stat-value">100</span>
+                        <div class="stat-bar">
+                            <div class="stat-fill stat-speed"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="abilities-card">
+                <h2 class="card-title">Abilities</h2>
+                <div class="abilities-list">
+                    <div class="ability-item">
+                        <div class="ability-name">Blaze</div>
+                        <div class="ability-description">Powers up Fire-type moves when the Pokémon's HP is low.</div>
+                    </div>
+                    <div class="ability-item">
+                        <div class="ability-name">Solar Power</div>
+                        <div class="ability-description">In harsh sunlight, the Pokémon's Sp. Atk stat is boosted, but its HP decreases every turn.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evolution Chain -->
+        <section class="evolution-section">
+            <h2 class="card-title">Evolution Chain</h2>
+            <div class="evolution-chain">
+                <div class="evolution-pokemon">
+                    <span class="evolution-sprite">🦎</span>
+                    <div class="evolution-name">Charmander</div>
+                    <div class="evolution-level">Base Form</div>
+                </div>
+                <span class="evolution-arrow">→</span>
+                <div class="evolution-pokemon">
+                    <span class="evolution-sprite">🔥</span>
+                    <div class="evolution-name">Charmeleon</div>
+                    <div class="evolution-level">Level 16</div>
+                </div>
+                <span class="evolution-arrow">→</span>
+                <div class="evolution-pokemon">
+                    <span class="evolution-sprite">🐉</span>
+                    <div class="evolution-name">Charizard</div>
+                    <div class="evolution-level">Level 36</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Type Effectiveness -->
+        <section class="type-effectiveness">
+            <h2 class="card-title">Type Effectiveness</h2>
+            <div class="effectiveness-grid">
+                <div class="effectiveness-category weak-to">
+                    <h3 class="effectiveness-title">Weak To (2x)</h3>
+                    <div class="effectiveness-types">
+                        <span class="mini-type type-water">Water</span>
+                        <span class="mini-type type-electric">Electric</span>
+                        <span class="mini-type type-rock">Rock</span>
+                    </div>
+                </div>
+                <div class="effectiveness-category resistant-to">
+                    <h3 class="effectiveness-title">Resistant To (0.5x)</h3>
+                    <div class="effectiveness-types">
+                        <span class="mini-type type-fire-mini">Fire</span>
+                        <span class="mini-type type-grass">Grass</span>
+                        <span class="mini-type type-fighting">Fighting</span>
+                        <span class="mini-type type-bug">Bug</span>
+                        <span class="mini-type type-steel">Steel</span>
+                        <span class="mini-type type-fairy">Fairy</span>
+                    </div>
+                </div>
+                <div class="effectiveness-category immune-to">
+                    <h3 class="effectiveness-title">Immune To (0x)</h3>
+                    <div class="effectiveness-types">
+                        <span class="mini-type type-ground">Ground</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

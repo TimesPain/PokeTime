@@ -1,0 +1,57 @@
+.evolution-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 4rem;
+        }
+
+        .evolution-chain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .evolution-pokemon {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .evolution-pokemon:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .evolution-sprite {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .evolution-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .evolution-level {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .evolution-arrow {
+            font-size: 2rem;
+            color: #4fc3f7;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
