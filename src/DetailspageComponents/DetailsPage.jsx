@@ -8,12 +8,12 @@ import "./DetailsPage.css";
 
 
 
-export function DetailsPage() {
+export function DetailsPage({ pokemonData }) {
   return (
     <>
     <BackGround />
     <Header />
-    <MainContent />
+    <MainContent pokemonData={pokemonData} />
     </>
   );
 }

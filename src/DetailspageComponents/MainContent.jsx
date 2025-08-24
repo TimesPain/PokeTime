@@ -4,11 +4,11 @@ import { EvolutionChain } from "./EvolutionChain";
 import "./MainContent.css";
 
 
-export function MainContent(){
+export function MainContent({ pokemonData }){
 
     return(
         <main className="container">
-        <PokemonHeader />
+        <PokemonHeader pokemonData={pokemonData} />
         <StatsnAbilities />
         <EvolutionChain />
 

@@ -12,7 +12,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage pokemonData={pokemonData} setPokemonData={setPokemonData} />} />
-      <Route path="/details" element={<DetailsPage />} />
+      <Route path="/details" element={<DetailsPage pokemonData={pokemonData} />} />
     </Routes>
   );
     
