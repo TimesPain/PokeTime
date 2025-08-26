@@ -10,7 +10,7 @@ export function PokemonHeader({ pokemonData }){
             <div className="pokemon-types">
                 {pokemonData.types.map((typeInfo) =>{
                     return(
-                    <span className={`type-badge type-${typeInfo.type.name}`}>{typeInfo.type.name.charAt(0).toUpperCase() + typeInfo.type.name.slice(1)}</span>
+                    <span key={crypto.randomUUID()} className={`type-badge type-${typeInfo.type.name}`}>{typeInfo.type.name.charAt(0).toUpperCase() + typeInfo.type.name.slice(1)}</span>
                ) }) }
             </div>
             <p className="pokemon-description">

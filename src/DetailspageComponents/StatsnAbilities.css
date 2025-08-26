@@ -91,12 +91,7 @@
             box-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
         }
 
-        .stat-hp { width: 52%; }
-        .stat-attack { width: 56%; }
-        .stat-defense { width: 52%; }
-        .stat-sp-attack { width: 73%; }
-        .stat-sp-defense { width: 57%; }
-        .stat-speed { width: 67%; }
+
 
         /* Abilities */
         .abilities-list {

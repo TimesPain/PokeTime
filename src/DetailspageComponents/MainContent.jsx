@@ -9,7 +9,7 @@ export function MainContent({ pokemonData }){
     return(
         <main className="container">
         <PokemonHeader pokemonData={pokemonData} />
-        <StatsnAbilities />
+        <StatsnAbilities pokemonData={pokemonData} />
         <EvolutionChain />
 
     </main>
