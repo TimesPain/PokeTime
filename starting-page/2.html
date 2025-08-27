@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Div Animation</title>
     <style>
+        .card3{
+            width: 200px;
+            height: 120px;
+            margin: 50px auto;
+            background: #6c5ce7;
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            
+
+        }
+        
         .bounce{
             width: 200px;
             height: 120px;
@@ -19,7 +34,7 @@
             font-size: 20px;
             opacity: 0;
             transform: scale(0.5);
-            animation: bounceIn 0.9s ease-out forwards;
+            animation: bounceIn 5s ease-out forwards;
         }
 
         @keyframes bounceIn {
@@ -52,7 +67,7 @@
             font-size: 20px;
             opacity: 0;
             transform: translateX(-500px);
-            animation: slideLeft 0.8s ease-out forwards;
+            animation: slideLeft 5s ease-out forwards;
         }
 
         @keyframes slideLeft {
@@ -75,7 +90,7 @@
             font-size: 20px;
             opacity: 0;
             transform: rotateY(90deg);
-            animation: flipIn 0.8s ease-out forwards;
+            animation: flipIn 5s ease-out forwards;
         }
 
         @keyframes flipIn {
@@ -99,7 +114,7 @@
 
             opacity: 0;
             transform: scale(0);
-            animation: zoomIn 0.8s ease forwards;
+            animation: zoomIn 5s ease forwards;
         }
 
         @keyframes zoomIn {
@@ -126,7 +141,7 @@
             transform: translateY(30px);
 
             /* Animation */
-            animation: fadeInUp 0.8s ease forwards;
+            animation: fadeInUp 5s ease forwards;
         }
 
         @keyframes fadeInUp {
@@ -144,6 +159,7 @@
     <div class="flip-in">Flip Me</div>
     <div class="slide-in">Slide Me</div>
     <div class="bounce">Bounce Me</div>
+    <div class="card3">very good</div>
 </body>
 
 </html>
